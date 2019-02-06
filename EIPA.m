@@ -1,5 +1,5 @@
 %%%%%%%%%%%% Harmonic Wave Equation in 2D FD and Modes %%%%%%%%%%%%
-% By David and Patrobas
+% By David, Patrobas, Andrew and Xiaochen
 % Febuary 6th, 2019
 global C;
 C.q_0 = 1.60217653e-19;             % electron charge
@@ -11,7 +11,7 @@ C.eps_0 = 8.854187817e-12;          % vacuum permittivity
 C.mu_0 = 1.2566370614e-6;           % vacuum permeability
 C.c = 299792458; % speed of light
 
-nx = 50;
+nx = 75;
 ny = 50;
 
 dx = 1;
@@ -60,5 +60,5 @@ f = figure();
 hold on;
 for n=1:9
     subplot(3,3,n);
-    surf(E_plot(:,:,n));
+    surf(E_plot(:,:,n),'EdgeColor','none','LineStyle','none','FaceLighting','phong');
 end
