@@ -18,29 +18,47 @@ dx = 1;
 dy = 1;
 G = sparse(nx*ny, ny*nx);
 alpha = (C.hb^2) / (2 * C.m_0);
+
+map = @(i,j) j + (i - 1)*ny;
+
+
 for i=1:nx
     for j=1:ny
-%        n = j + (1 - 1) * ny;
-       G((i-1)*nx+1,(j-1)*nx+1) = -2 / dx^2 + -2 / dy^2;
-%        if (j+(i-1-1)*ny > 1)
-%            G(i,j+(i-1-1)*ny) = 1 / dx^2;
-%        end
-%        if (j+(i-1+1)*ny > 1)
-%            G(i,j+(i-1+1)*ny) = 1 / dx^2;
-%        end
-%        if (j-1+(i-1)*ny > 1)
-%            G(i,j-1+(i-1)*ny) = 1 / dy^2;
-%        end
-%        if (j+1+(i-1)*ny > 1)
-%            G(i,j+1+(i-1)*ny) = 1 / dy^2;
-%        end
+        n = map(i,j);
+        nxm = map(i-1,j);
+        nxp = map(i+1,j);
+        nym = map(i,j-1);
+        nyp = map(i,j+1);
+        
+        if (i == 1 || i == nx)
+            G(n,n) = 1 / dx^2;
+        elseif (j == 1 || j == ny)
+            G(n,n) = 1 / dy^2;
+        else
+            G(n,n) = -2 / dx^2 + -2 / dy^2;
+            G(n,nxm) = 1 / dx^2;
+            G(n,nxp) = 1 / dx^2;
+            G(n,nym) = 1 / dy^2;
+            G(n,nyp) = 1 / dy^2;
+        end
     end
 end
-G(1,:) = 1/dy^2;
-G(nx*ny,:) = 1/dy^2;
-G(:,1) = 1/dx^2;
-G(:,nx*ny) = 1/dx^2;
 
-% [E,D] = eigs(G,9,'SM');
-spy(G);
-% surf(E);
+%spy(G);
+[E,D] = eigs(G,9,'SM');
+
+E_plot = zeros(nx,ny,9);
+for n=1:9
+    for i=1:nx
+        for j=1:ny
+            E_plot(i,j,n) = E(map(i,j),n);
+        end
+    end
+end
+
+f = figure();
+hold on;
+for n=1:9
+    subplot(3,3,n);
+    surf(E_plot(:,:,n));
+end
