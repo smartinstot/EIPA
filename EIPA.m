@@ -34,6 +34,13 @@ for i=1:nx
             G(n,n) = 1 / dx^2;
         elseif (j == 1 || j == ny)
             G(n,n) = 1 / dy^2;
+            
+        elseif (i > 10 & i <20 & j > 10 & j <20)
+            G(n,n) = -1 / dx^2 + -1 / dy^2;
+            G(n,nxm) = 1 / dx^2;
+            G(n,nxp) = 1 / dx^2;
+            G(n,nym) = 1 / dy^2;
+            G(n,nyp) = 1 / dy^2;
         else
             G(n,n) = -2 / dx^2 + -2 / dy^2;
             G(n,nxm) = 1 / dx^2;
